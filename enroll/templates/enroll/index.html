@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chatbot</title>
+</head>
+<body>
+    <h1>Chatbot</h1>
+    
+    <div id="chat">
+        <div id="chat-history">
+            {% for message in chat_history %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+        
+        <input type="text" id="user-input">
+        <button id="send-button">Send</button>
+    </div>
+    
+    <div id="chatbot-response">
+        {% if response %}
+            <p>{{ response }}</p>
+        {% endif %}
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#send-button').on('click', function () {
+                var userMessage = $('#user-input').val();
+                $('#user-input').val('');
+                $('#chat-history').append('<p>You: ' + userMessage + '</p>');
+                
+                $.ajax({
+                    url: '/chatbot_response/',
+                    type: 'GET',
+                    data: { input_text: userMessage },
+                    dataType: 'json',
+                    success: function (data) {
+                        var botResponse = data.response;
+                        $('#chat-history').append('<p>Chatbot: ' + botResponse + '</p>');
+                        
+                        // Display the chatbot response in the chatbot-response div
+                        $('#chatbot-response').html('<p>Chatbot: ' + botResponse + '</p>');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
