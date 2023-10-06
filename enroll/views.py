@@ -2,7 +2,7 @@ import openai
 from django.shortcuts import render
 
 # Set your OpenAI API key here
-openai.api_key = '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'
+openai.api_key = 'your_api_key'
 
 def chatbot_response(request):
     user_input = request.GET.get('input_text', '')
